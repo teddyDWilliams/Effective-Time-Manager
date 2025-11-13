@@ -1,10 +1,12 @@
 @page "/Todo"
+
 @rendermode InteractiveServer
 
 <h3>ToDo (@todos.Count(todo => !todo.IsDone))</h3>
 
 @code {
     private List<TodoItem> todos = new();
+    
     string newTodo = "";
 
     void AddTodo()

@@ -1,0 +1,48 @@
+@page "/EnterEvent"
+@rendermode InteractiveServer
+
+<h2>EnterEvent</h2>
+
+@code {
+    //private List<CreateEvent> events = new();
+    string title = "";
+    string Day = "";
+    int day = 0;
+    //int month = 0;
+    //int year = 0;
+    //int startTime = 0;
+    //int endTime = 0;
+
+    void addTitle()
+    {
+        if(!string.IsNullOrWhiteSpace(title))
+        {
+            title = string.Empty;
+        }
+    }
+    void addDay()
+    {
+        if(!string.IsNullOrWhiteSpace(Day))
+        {
+            int.TryParse(Day,out day);
+            Day = string.Empty;
+        }
+    }
+    
+}
+<ul>
+    <li>
+        <@bind="title" />
+        <@bind="day" />
+    </li>
+</ul>
+
+<input @bind="title"/>
+<button @onclick="addTitle">Add Event Title</button>
+
+if(title !== "" )
+{
+    <input @bind="Day"/>
+    <button @onclick="addDay">Add Event Day</button>
+    
+}
