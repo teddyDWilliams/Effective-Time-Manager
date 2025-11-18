@@ -1,48 +1,112 @@
 @page "/EnterEvent"
 @rendermode InteractiveServer
 
-<h2>EnterEvent</h2>
+<h3>Create Event (@events.Count)</h3>
+
+<label>Title:</label>
+<input @bind="title" />
+<button @onclick="addTitle">Next</button>
+
+@if (!string.IsNullOrWhiteSpace(confirmedTitle))
+{
+    <label>Day:</label>
+    <input @bind="Day" />
+    <button @onclick="addDay">Next</button>
+}
+
+@if(day > 0)
+{
+    <label>Month:</label>
+    <input @bind="Month" />
+    <button @onclick="addMonth">Next</button>
+}
+
+@if(month > 0)
+{
+    <label>Year:</label>
+    <input @bind="Year" />
+    <button @onclick="addEvent">Add Event</button>
+}
+
+<h3>Events:</h3>
+
+@if (events.Count == 0)
+{
+    <p>No events yet.</p>
+}
+else
+{
+    <ul>
+        @foreach (var e in events)
+        {
+            <li>
+                <input type="checkbox" @bind="e.IsDone" />
+                @e.title - Day @e.day
+            </li>
+        }
+    </ul>
+}
 
 @code {
-    //private List<CreateEvent> events = new();
+    private List<CreateEvent> events = new();
+
     string title = "";
+    string confirmedTitle = "";
     string Day = "";
     int day = 0;
-    //int month = 0;
-    //int year = 0;
-    //int startTime = 0;
-    //int endTime = 0;
+    string Month = "";
+    int month = 0;
+    string Year = "";
+    int year = 0;
 
     void addTitle()
     {
-        if(!string.IsNullOrWhiteSpace(title))
+        if (!string.IsNullOrWhiteSpace(title))
         {
+            confirmedTitle = title;
             title = string.Empty;
         }
     }
+
     void addDay()
     {
-        if(!string.IsNullOrWhiteSpace(Day))
+        if (int.TryParse(Day, out day) && day >= 1 && day <= 31)
         {
-            int.TryParse(Day,out day);
-            Day = string.Empty;
+            Day = "";
         }
     }
-    
-}
-<ul>
-    <li>
-        <@bind="title" />
-        <@bind="day" />
-    </li>
-</ul>
 
-<input @bind="title"/>
-<button @onclick="addTitle">Add Event Title</button>
+    void addMonth()
+    {
+        if (int.TryParse(Month, out month) && month >= 1 && month <= 12)
+        {
+            Month = "";
+        }
+    }
 
-if(title !== "" )
-{
-    <input @bind="Day"/>
-    <button @onclick="addDay">Add Event Day</button>
-    
+    void addYear()
+    {
+        if(int.TryParse(Year,out year) && year >= 2025)
+        {
+            Year = "";
+        }
+    }
+
+    void addEvent()
+    {
+            events.Add(new CreateEvent
+            (
+                confirmedTitle,
+                day,
+                month,
+                year,
+                0,
+                15
+            ));
+            confirmedTitle = "";
+            Day = "";
+        
+    }
 }
+
+    
