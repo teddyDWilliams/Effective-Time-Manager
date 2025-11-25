@@ -5,7 +5,7 @@
 
 <label>Title:</label>
 <input @bind="title" />
-<button @onclick="addTitle">Next</button>
+<button @onclick="addTitle" >Next</button>
 
 @if (!string.IsNullOrWhiteSpace(confirmedTitle))
 {
@@ -26,6 +26,12 @@
     <label>Year:</label>
     <input @bind="Year" />
     <button @onclick="addYear">Next</button>
+    
+
+}
+
+@if(year > 0)
+{
     <button @onclick="addEvent">Add Event</button>
 }
 
@@ -44,7 +50,9 @@ else
         {
             <li>
                 <input type="checkbox" @bind="e.IsDone" />
-                @e.title - Day @e.day
+                
+                @e.title - @e.m @e.day, @e.year
+                | @e.date
             </li>
         }
     </ul>
@@ -61,6 +69,7 @@ else
     int month = 0;
     string Year = "";
     int year = 0;
+    
 
     void addTitle()
     {
@@ -84,6 +93,10 @@ else
         if (int.TryParse(Month, out month) && month >= 1 && month <= 12)
         {
             Month = "";
+
+            
+            
+                
         }
     }
 
@@ -106,9 +119,21 @@ else
                 0,
                 15
             ));
+            title = "";
             confirmedTitle = "";
-            Day = "";
+            day = 0;
+            month = 0;
+            year = 0;
         
+    }
+
+    void userContinue(KeyboardEventArgs e)
+    {
+        //if(e.Code == "Enter")
+        {
+            
+            addTitle();
+        }
     }
 }
 
