@@ -32,6 +32,24 @@
 
 @if(year > 0)
 {
+    <label>Start Time</label>
+    <input @bind="sH" />
+    <span><strong>:</strong></span>
+    <input @bind="sM" />
+    <button @onclick="addStartTime">Next</button>
+}
+
+@if(year > 0 && startHour >= 0 && startMinute >= 0 && startHour <= 23 && startMinute <= 59)
+{
+    <label>End Time</label>
+    <input @bind="eH" />
+    <span><strong>:</strong></span>
+    <input @bind="eM" />
+    <button @onclick="addEndTime">Next</button>
+}
+
+@if(year > 0 && endHour >= 0 && endMinute >= 0 && endHour <= 23 && endMinute <= 59)
+{
     <button @onclick="addEvent">Add Event</button>
 }
 
@@ -51,8 +69,9 @@ else
             <li>
                 <input type="checkbox" @bind="e.IsDone" />
                 
-                @e.title - @e.m @e.day, @e.year
-                | @e.date
+                @e.title - @e.m @e.day, @e.year from @e.startDate.Hour:@e.startDate.Minute to @e.endDate.Hour:@e.endDate.Minute | 
+                <p>The event is @e.timeUntil.Days days, @e.timeUntil.Hours hours, and @e.timeUntil.Minutes minutes away from now.</p>
+                <!-- @e.eventDuration.Hours hours and @e.eventDuration.Minutes minutes long -->
             </li>
         }
     </ul>
@@ -69,7 +88,14 @@ else
     int month = 0;
     string Year = "";
     int year = 0;
-    
+    string sH = "";
+    string sM = "";
+    string eH = "";
+    string eM = "";
+    int startHour = -1;
+    int startMinute = -1;
+    int endHour = -1;
+    int endMinute = -1;
 
     void addTitle()
     {
@@ -93,10 +119,6 @@ else
         if (int.TryParse(Month, out month) && month >= 1 && month <= 12)
         {
             Month = "";
-
-            
-            
-                
         }
     }
 
@@ -108,6 +130,30 @@ else
         }
     }
 
+    void addStartTime()
+    {
+        if(int.TryParse(sH,out startHour) && startHour >= 0 && startHour <= 23)
+        {
+            sH = "";
+        }
+        if(int.TryParse(sM,out startMinute) && startMinute >= 0 && startMinute <= 59)
+        {
+            sM = "";
+        }
+    }
+
+    void addEndTime()
+    {
+        if(int.TryParse(eH,out endHour) && endHour >= 0 && endHour <= 23)
+        {
+            eH = "";
+        }
+        if(int.TryParse(eM,out endMinute) && endMinute >= 0 && endMinute <= 59)
+        {
+            eM = "";
+        }
+    }
+
     void addEvent()
     {
             events.Add(new CreateEvent
@@ -116,22 +162,26 @@ else
                 day,
                 month,
                 year,
-                0,
-                15
+                startHour,
+                startMinute,
+                endHour,
+                endMinute
             ));
             title = "";
             confirmedTitle = "";
             day = 0;
             month = 0;
             year = 0;
-        
+            startHour = -1;
+            startMinute = -1;
+            endHour = -1;
+            endMinute = -1;
     }
 
     void userContinue(KeyboardEventArgs e)
     {
-        //if(e.Code == "Enter")
+        if(e.Code == "Enter")
         {
-            
             addTitle();
         }
     }

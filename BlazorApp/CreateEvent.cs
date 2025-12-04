@@ -6,8 +6,10 @@ public class CreateEvent
     public int day { get; set; }
     public int month { get; set; }
     public int year { get; set; }
-    public int startTime { get; set; }
-    public int endTime { get; set; }
+    public int startHour { get; set; }
+    public int startMinute { get; set; }
+    public int endHour { get; set; }
+    public int endMinute { get; set; }
     public String m
     {
         get
@@ -44,16 +46,23 @@ public class CreateEvent
             }
         }  
     }
-    public DateTime date;
-    public CreateEvent(String title,int day,int month,int year,int startTime,int endTime)
+    public DateTime startDate;
+    public DateTime endDate;
+    public TimeSpan eventDuration;
+    public TimeSpan timeUntil;
+    public CreateEvent(String title,int day,int month,int year,int startHour,int startMinute,int endHour,int endMinute)
     {
         this.title = title;
         this.day = day;
         this.month = month;
         this.year = year;
-        this.startTime = startTime;
-        this.endTime = endTime;
-        
-        date = new DateTime(year,month,day,0,0,0);
+        this.startHour = startHour;
+        this.startMinute = startMinute;
+        this.endMinute = endMinute;
+
+        startDate = new DateTime(year,month,day,startHour,startMinute,0);
+        endDate = new DateTime(year,month,day,endHour,endMinute,0);
+        eventDuration = endDate.Subtract(startDate);
+        timeUntil = startDate.Subtract(DateTime.Now);
     }
 }
