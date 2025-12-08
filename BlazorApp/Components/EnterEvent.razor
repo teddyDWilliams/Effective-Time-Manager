@@ -18,8 +18,13 @@
 {
     <label>Month:</label>
     <input @bind="Month" />
+    
+    <label> Recurring Days: </label>
+    <input @bind="rC" />
     <button @onclick="addMonth">Next</button>
 }
+
+
 
 @if(month > 0)
 {
@@ -78,6 +83,9 @@ else
 }
 
 @code {
+
+    @using System
+    @using System.Collections
     private List<CreateEvent> events = new();
 
     string title = "";
@@ -96,6 +104,8 @@ else
     int startMinute = -1;
     int endHour = -1;
     int endMinute = -1;
+    string rC = "";
+    BitArray daysOfWeek = new BitArray(7,false);
 
     void addTitle()
     {
@@ -111,6 +121,37 @@ else
         if (int.TryParse(Day, out day) && day >= 1 && day <= 31)
         {
             Day = "";
+        }
+    }
+
+    void addRecurring()
+    {
+        daysOfWeek.SetAll(false);
+
+        if(!string.IsNullOrWhiteSpace(rC))
+        {
+            if(rC.Contains("Monday") || rC.Contains("monday"))
+            {
+                daysOfWeek[0] = true;
+            }else if(rC.Contains("tuesday") || rC.Contains("Tuesday"))
+            {
+                daysOfWeek[1] = true;
+            }else if(rC.Contains("Wednesday") || rC.Contains("wednesday"))
+            {
+                daysOfWeek[2] = true;
+            }else if(rC.Contains("Thursday") || rC.Contains("thursday"))
+            {
+                daysOfWeek[3] = true;
+            }else if(rC.Contains("Friday") || rC.Contains("friday"))
+            {
+                daysOfWeek[4] = true;
+            }else if(rC.Contains("Saturday") || rC.Contains("saturday"))
+            {
+                daysOfWeek[5] = true;
+            }else if(rC.Contains("Sunday") || rC.Contains("sunday"))
+            {
+                daysOfWeek[6] = true;
+            }
         }
     }
 
@@ -135,6 +176,9 @@ else
         if(int.TryParse(sH,out startHour) && startHour >= 0 && startHour <= 23)
         {
             sH = "";
+            if(startHour > 12){
+                startHour = startHour - 12;
+            }
         }
         if(int.TryParse(sM,out startMinute) && startMinute >= 0 && startMinute <= 59)
         {
@@ -147,6 +191,9 @@ else
         if(int.TryParse(eH,out endHour) && endHour >= 0 && endHour <= 23)
         {
             eH = "";
+            if(endHour > 12){
+                endHour = endHour - 12;
+            }
         }
         if(int.TryParse(eM,out endMinute) && endMinute >= 0 && endMinute <= 59)
         {
